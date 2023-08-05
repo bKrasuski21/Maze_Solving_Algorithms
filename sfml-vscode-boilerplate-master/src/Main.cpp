@@ -10,9 +10,6 @@ int main()
 {
 	util::Platform platform;
 
-#if defined(_DEBUG)
-	//std::cout << "Hello World!" << std::endl;
-#endif
 
 
 	sf::RenderWindow window;
@@ -26,11 +23,11 @@ int main()
 	shape.setFillColor(sf::Color::White);
 
 	sf::Texture shapeTexture;
-	shapeTexture.loadFromFile("content/sfml.png");
+	shapeTexture.loadFromFile("content/no_path.png");
 	shape.setTexture(&shapeTexture);
 
-	/*sf::Event event;
-
+	//sf::Event event;
+/*
 	while (window.isOpen())
 	{
 		while (window.pollEvent(event))
