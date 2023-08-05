@@ -20,6 +20,10 @@ int main()
 	cin >> size;
 	//cout << size;
 	Maze newMaze(size);
+	newMaze.BFSsearch();
+	newMaze.DFSsearch();
+
+
 	newMaze.renderMaze();
 
 

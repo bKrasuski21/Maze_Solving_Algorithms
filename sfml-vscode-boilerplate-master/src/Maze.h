@@ -12,10 +12,20 @@ class Maze{
 	private:
 	int tempSize;
 	vector<vector<int>> column;
+	vector<vector<int>> solvedMazeDFS;
+	vector<vector<int>> solvedMazeBFS;
+	int startX;
+	int startY;
+	int finishX;
+	int finishY;
+	int nodesVisitedDFS;
+	int nodesVisitedBFS;
 	public:
 
 	Maze();
 	//~Maze();
 	Maze(int size);
 	void renderMaze();
+	bool DFSsearch();
+	bool BFSsearch();
 };

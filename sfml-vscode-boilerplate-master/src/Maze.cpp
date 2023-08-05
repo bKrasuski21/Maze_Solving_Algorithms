@@ -8,6 +8,7 @@
 #include <time.h>
 #include <stack>
 #include "Platform/Platform.hpp"
+#include <queue>
 
 using namespace std;
 
@@ -57,29 +58,29 @@ Maze::Maze(int size)
 
 	}
 
-	for(int i = 0; i < mazeSize; i++){
+	//for(int i = 0; i < mazeSize; i++){
 
-		for(int k=0; k < mazeSize; k++) {  // prints maze before maze is created
+	//	for(int k=0; k < mazeSize; k++) {  // prints maze before maze is created
 
-			cout << column[i][k] << " ";
-		}
+	//		cout << column[i][k] << " ";
+	//	}
 
-		cout << endl;
-	}
+	//	cout << endl;
+	//}
 
 	int yMove[] = {2, 0, -2, 0}; // creates array for adjacent/neighboring nodes
 	int xMove[] = {0, 2, 0, -2};
 
-	/*int fun = mazeSize/2;    // allows maze to be created from center - however currently not working for even numbers
-		if(mazeSize % 2 != 1){
-			 fun = mazeSize+1/2;
+	int fun = mazeSize/2;    // allows maze to be created from center
+		if(fun % 2 == 0){
+			 fun++;
 		}
-		*/
+
 
 		vector<vector<bool>> vusuted(mazeSize, vector<bool>(mazeSize, false)); // visited vector
 		stack<pair<int, int>> mStack; // path stack
-		mStack.push(make_pair(1,1)); // pushes back start node to stack
-		vusuted[1][1] = true; // marks start node as visited
+		mStack.push(make_pair(fun,fun)); // pushes back start node to stack
+		vusuted[fun][fun] = true; // marks start node as visited
 
 		while(!mStack.empty()){
 			int x = mStack.top().first;
@@ -147,7 +148,7 @@ Maze::Maze(int size)
 	int yStart[] = {1, 0, -1, 0}; // creates array for adjacent/neighboring nodes
 	int xStart[] = {0, 1, 0, -1};
 	bool start = false;
-	while(!start){
+	while(!start){ // while no start has been chosen repeat
 		int startNum = rand() % (mazeSize-2) + 1; // get a random number between 1 - size -1 for location of start
 		int startSide = rand() % 4; // get a random number between 0- 3 to choose which side start will be on
 
@@ -168,7 +169,11 @@ Maze::Maze(int size)
 						if(column[newX][newY] == 3 || column[newX][newY] == 4){start = true;} // if there is a path neighbor set bool to true
 					}
 				}
-			if(start) {column[0][startNum] = 2;} // if there is a valid path neighbor change current node to start
+			if(start) { // if there is a valid path neighbor change current node to start
+				column[0][startNum] = 2;
+				startX = 0;
+				startY = startNum;
+				}
 		}
 
 	else if(startSide == 1)
@@ -188,7 +193,11 @@ Maze::Maze(int size)
 						if(column[newX][newY] == 3 || column[newX][newY] == 4){start = true;} // if there is a path neighbor set bool to true
 					}
 				}
-			if(start) {column[mazeSize-1][startNum] = 2;}  // if there is a valid path neighbor change current node to start
+			if(start) {
+				column[mazeSize-1][startNum] = 2;
+				startX = mazeSize-1;
+				startY = startNum;
+				}  // if there is a valid path neighbor change current node to start
 		}
 
 	else if(startSide == 2)
@@ -208,7 +217,10 @@ Maze::Maze(int size)
 						if(column[newX][newY] == 3 || column[newX][newY] == 4){start = true;}
 					}
 				}
-			if(start) {column[startNum][mazeSize-1] = 2;}  // if there is a valid path neighbor change current node to start
+			if(start) {
+				column[startNum][mazeSize-1] = 2;
+				startY = mazeSize-1;
+				startX = startNum;}  // if there is a valid path neighbor change current node to start
 		}
 
 	else if(startSide == 3)
@@ -227,13 +239,16 @@ Maze::Maze(int size)
 						if(column[newX][newY] == 3 || column[newX][newY] == 4){start = true;}// if valid neighbor for start sets bool to true
 					}
 				}
-			if(start) {column[startNum][0] = 2;}  // if there is a valid path neighbor change current node to start
+			if(start) {
+				column[startNum][0] = 2;
+				startY = 0;
+				startX = startNum;
+				}  // if there is a valid path neighbor change current node to start
 		}
 	}
 
-
 	bool finish = false;
-	while(!finish){
+	while(!finish){ // while no finish has been chosen repeat
 		int finishNum = rand() % (mazeSize-2) + 1; // get a random number between 1 - size -1 for location of start
 		int finishSide = rand() % 4; // get a random number between 0- 3 to choose which side start will be on
 
@@ -253,7 +268,10 @@ Maze::Maze(int size)
 						if(column[newX][newY] == 3 || column[newX][newY] == 4){finish = true;}// if valid neighbor for finish sets bool to true
 					}
 				}
-			if(finish) {column[0][finishNum] = 2;}  // if there is a valid path neighbor change current node to start
+			if(finish) {
+				column[0][finishNum] = 5;
+				finishX = 0;
+				finishY = finishNum;}  // if there is a valid path neighbor change current node to start
 		}
 	else if(finishSide == 1)
 		{
@@ -271,7 +289,11 @@ Maze::Maze(int size)
 						if(column[newX][newY] == 3 || column[newX][newY] == 4){finish = true;}// if valid neighbor for finish sets bool to true
 					}
 				}
-			if(finish) {column[mazeSize-1][finishNum] = 2;}  // if there is a valid path neighbor change current node to start
+			if(finish) {
+				column[mazeSize-1][finishNum] = 5;
+				finishX = mazeSize-1;
+				finishY = finishNum;
+				}  // if there is a valid path neighbor change current node to start
 		}
 	else if(finishSide == 2)
 		{
@@ -289,7 +311,10 @@ Maze::Maze(int size)
 						if(column[newX][newY] == 3 || column[newX][newY] == 4){finish = true;} // if valid neighbor for finish sets bool to true
 					}
 				}
-			if(finish) {column[finishNum][mazeSize-1] = 2;}  // if there is a valid path neighbor change current node to start
+			if(finish) {
+				column[finishNum][mazeSize-1] = 5;
+				finishX = finishNum;
+				finishY = mazeSize-1;}  // if there is a valid path neighbor change current node to start
 		}
 	else if(finishSide == 3)
 		{
@@ -307,20 +332,29 @@ Maze::Maze(int size)
 						if(column[newX][newY] == 3 || column[newX][newY] == 4){finish = true;} // if valid neighbor for finish sets bool to true
 					}
 				}
-			if(finish) {column[finishNum][0] = 2;}  // if there is a valid path neighbor change current node to start
+			if(finish) {
+				column[finishNum][0] = 5;
+				finishY = 0;
+				finishX = finishNum;
+			}  // if there is a valid path neighbor change current node to start
 		}
 	}
 
-	cout << "Everything ended properly??" << endl;
+	cout << "Everything ended properly??" << endl; // for printing numerical equivalent of maze
 	for(int i = 0; i < mazeSize; i++){
+			vector<int> mazeRow;
+			solvedMazeBFS.push_back(mazeRow);
+			solvedMazeDFS.push_back(mazeRow);
 		for(int k=0; k < mazeSize; k++) {
-			cout << column[i][k] << " ";
-			//mazeVector[i][k] = column[i][k];
+			//cout << column[i][k] << " ";
+			solvedMazeDFS.at(i).push_back(column[i][k]);
+			solvedMazeBFS.at(i).push_back(column[i][k]);
 		}
-		cout << endl;
+		//cout << endl;
 	}
 
 }
+
 void Maze::renderMaze(){
 
 	util::Platform platform;
@@ -329,16 +363,31 @@ void Maze::renderMaze(){
 	// in Windows at least, this must be called before creating the window
 	float screenScalingFactor = platform.getScreenScalingFactor(window.getSystemHandle());
 	// Use the screenScalingFactor
-	window.create(sf::VideoMode(1200.0f * screenScalingFactor, 1200.0f * screenScalingFactor), "SFML works!");
+	window.create(sf::VideoMode(1600.0f * screenScalingFactor, 1200.0f * screenScalingFactor), "Maze Ronner (pls no copyright)");
 	platform.setIcon(window.getSystemHandle());
 
 	sf::Texture pathTexture;
 	sf::Texture algoText;
 	sf::Texture noPathTexture;
+	sf::Texture finish;
+	sf::Texture BFSText;
+	sf::Texture DFSText;
+	sf::Texture solved;
+	sf::Texture resetText;
+	sf::Texture solvedDfs;
+	bool BFSButton = false;
+	bool DFSButton = false;
+	bool resetButton = true;
 
 	noPathTexture.loadFromFile("content/yellow.png");
 	pathTexture.loadFromFile("content/path.png");
 	algoText.loadFromFile("content/magenta.png");
+	finish.loadFromFile("content/niceGreen.png");
+	DFSText.loadFromFile("content/dfs.png");
+	BFSText.loadFromFile("content/bfs.png");
+	solved.loadFromFile("content/redd.png");
+	solvedDfs.loadFromFile("content/Orange.png");
+	resetText.loadFromFile("content/reset.png");
 
 
 	/*vector<vector<Node>> nodeVector;
@@ -358,8 +407,9 @@ void Maze::renderMaze(){
 			}
 		}
 	}
-*/
-	float sizeOfNode = 1200/tempSize;
+	*/
+
+	float sizeOfNode = 1200.0/(float)tempSize;
 	sf::Event event;
 
 	while (window.isOpen())
@@ -371,22 +421,194 @@ void Maze::renderMaze(){
 		}
 
 		window.clear();
+		sf::RectangleShape bfs(sf::Vector2f(200.f, 200.f));
+		sf::RectangleShape dfs(sf::Vector2f(200.f, 200.f));
+		sf::RectangleShape reset(sf::Vector2f(200.f, 200.f));
+		bfs.setPosition(1300, 100);
+		dfs.setPosition(1300, 400);
+		reset.setPosition(1300, 700);
+		bfs.setTexture(&BFSText);
+		dfs.setTexture(&DFSText);
+		reset.setTexture(&resetText);
 
-		for(int i =0; i < tempSize; i++){
-			for(int k = 0; k < tempSize; k++){
-				//nodeVector[i][k].setPosition(20.f * i, 20.f * k);
-				sf::RectangleShape shape(sf::Vector2f(sizeOfNode , sizeOfNode));
-				shape.setPosition(sizeOfNode * i, sizeOfNode * k);
-				if(column[i][k] == 1){
-					shape.setTexture(&noPathTexture);
-				}else if(column[i][k] == 2){
-					shape.setTexture(&algoText);
-				}else {
-					shape.setTexture(&pathTexture);
+		if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			//sf::Vector2i localPos = sf::Mouse::getPosition(window);
+			int x = sf::Mouse::getPosition(window).x;
+			int y = sf::Mouse::getPosition(window).y;
+			if(x >1299 && x < 1501){
+				if(y >= 100 && y <= 300){
+					bfs.setSize(sf::Vector2f(150.f, 150.f));
+					BFSButton = true;
+					DFSButton = false;
+					resetButton = false;
 				}
-				window.draw(shape);
+				else if(y >=400 && y <= 600){
+					dfs.setSize(sf::Vector2f(150.f, 150.f));
+					DFSButton = true;
+					BFSButton = false;
+					resetButton = false;
+				}else if(y >= 700 && y <= 900){
+					reset.setSize(sf::Vector2f(150.f, 150.f));
+					DFSButton = false;
+					BFSButton = false;
+					resetButton = true;
+				}
 			}
 		}
+		if(resetButton){
+			for(int i =0; i < tempSize; i++){
+				for(int k = 0; k < tempSize; k++){
+					//nodeVector[i][k].setPosition(20.f * i, 20.f * k);
+					sf::RectangleShape shape(sf::Vector2f(sizeOfNode , sizeOfNode));
+					shape.setPosition(sizeOfNode * i, sizeOfNode * k);
+					if(column[i][k] == 1){
+						shape.setTexture(&noPathTexture);
+					}else if(column[i][k] == 6){
+						shape.setTexture(&solved);
+					}else if(column[i][k] == 5){
+						shape.setTexture(&finish);
+					}else if(column[i][k] == 2){
+						shape.setTexture(&algoText);
+					}else {
+						shape.setTexture(&pathTexture);
+					}
+					window.draw(shape);
+				}
+			}
+		}
+		if(BFSButton){
+			for(int i =0; i < tempSize; i++){
+				for(int k = 0; k < tempSize; k++){
+					//nodeVector[i][k].setPosition(20.f * i, 20.f * k);
+					sf::RectangleShape shape(sf::Vector2f(sizeOfNode , sizeOfNode));
+					shape.setPosition(sizeOfNode * i, sizeOfNode * k);
+					if(solvedMazeBFS[i][k] == 1){
+						shape.setTexture(&noPathTexture);
+					}else if(solvedMazeBFS[i][k] == 6){
+						shape.setTexture(&solved);
+					}else if(solvedMazeBFS[i][k] == 5){
+						shape.setTexture(&finish);
+					}else if(solvedMazeBFS[i][k] == 2){
+						shape.setTexture(&algoText);
+					}else {
+						shape.setTexture(&pathTexture);
+					}
+					window.draw(shape);
+				}
+			}
+		}
+		if(DFSButton){
+			for(int i =0; i < tempSize; i++){
+				for(int k = 0; k < tempSize; k++){
+					//nodeVector[i][k].setPosition(20.f * i, 20.f * k);
+					sf::RectangleShape shape(sf::Vector2f(sizeOfNode , sizeOfNode));
+					shape.setPosition(sizeOfNode * i, sizeOfNode * k);
+					if(solvedMazeDFS[i][k] == 1){
+						shape.setTexture(&noPathTexture);
+					}else if(solvedMazeDFS[i][k] == 6){
+						shape.setTexture(&solvedDfs);
+					}else if(solvedMazeDFS[i][k] == 5){
+						shape.setTexture(&finish);
+					}else if(solvedMazeDFS[i][k] == 2){
+						shape.setTexture(&algoText);
+					}else {
+						shape.setTexture(&pathTexture);
+					}
+					window.draw(shape);
+				}
+			}
+		}
+
+
+		window.draw(bfs);
+		window.draw(dfs);
+		window.draw(reset);
 		window.display();
 	}
 }
+
+bool Maze::DFSsearch(){
+	int yMove[] = {1, 0, -1, 0}; // creates array for adjacent/neighboring nodes
+	int xMove[] = {0, 1, 0, -1};
+
+	vector<vector<bool>> visitedVert(tempSize, vector<bool>(tempSize, false));
+	stack<pair<int, int>> mStack;
+
+	visitedVert[startX][startY] = true;
+	mStack.push(make_pair(startX,startY));
+	nodesVisitedDFS = 0;
+	while(!mStack.empty()){
+
+				int x = mStack.top().first;
+				int y = mStack.top().second;
+				if(solvedMazeDFS[x][y] != 2 && solvedMazeDFS[x][y] != 5){
+					solvedMazeDFS[x][y] = 6;
+				}
+
+				mStack.pop();
+					if(x == finishX && y == finishY){
+						cout << "Aooke" << endl;
+
+						cout << nodesVisitedDFS << "DFs " << endl;
+						return true;
+					}
+
+			for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
+
+				int newX = x + xMove[i];
+
+				int newY = y + yMove[i];
+
+					if(newX >= 0 && newX < tempSize && newY >= 0 && newY < tempSize && solvedMazeDFS[newX][newY] != 1 && !visitedVert[newX][newY])
+					{
+						mStack.push(make_pair(newX, newY));
+						nodesVisitedDFS++;
+						visitedVert[newX][newY] = true;
+				}
+			}
+		}
+		return false;
+	}
+bool Maze::BFSsearch(){
+	int xMove[] = {-1, 0, 1, 0}; // creates array for adjacent/neighboring nodes
+	int yMove[] = {0, -1, 0, 1};
+
+	vector<vector<bool>> visitedVert(tempSize, vector<bool>(tempSize, false));
+	queue<pair<int, int>> mQueue;
+
+	visitedVert[startX][startY] = true;
+	mQueue.push(make_pair(startX,startY));
+	nodesVisitedBFS = 0;
+	while(!mQueue.empty()){
+
+				int x = mQueue.front().first;
+				int y = mQueue.front().second;
+				if(solvedMazeBFS[x][y] != 2 && solvedMazeBFS[x][y] != 5){
+					solvedMazeBFS[x][y] = 6;
+				}
+
+				mQueue.pop();
+					if(x == finishX && y == finishY){
+						cout << "Aooke" << endl;
+
+						cout << nodesVisitedBFS <<  " BFS " << endl;
+						return true;
+					}
+
+			for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
+
+				int newX = x + xMove[i];
+
+				int newY = y + yMove[i];
+
+					if(newX >= 0 && newX < tempSize && newY >= 0 && newY < tempSize && solvedMazeBFS[newX][newY] != 1 && !visitedVert[newX][newY])
+					{
+						mQueue.push(make_pair(newX, newY));
+						nodesVisitedBFS++;
+						visitedVert[newX][newY] = true;
+				}
+			}
+		}
+		return false;
+	}
