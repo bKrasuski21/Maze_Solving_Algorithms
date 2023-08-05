@@ -340,7 +340,7 @@ Maze::Maze(int size)
 		}
 	}
 
-	cout << "Everything ended properly??" << endl; // for printing numerical equivalent of maze
+	//cout << "Everything ended properly??" << endl; // for printing numerical equivalent of maze
 	for(int i = 0; i < mazeSize; i++){
 			vector<int> mazeRow;
 			solvedMazeBFS.push_back(mazeRow);
@@ -529,7 +529,7 @@ void Maze::renderMaze(){
 }
 
 bool Maze::DFSsearch(){
-	int yMove[] = {1, 0, -1, 0}; // creates array for adjacent/neighboring nodes
+	int yMove[] = {-1, 0, 1, 0}; // creates array for adjacent/neighboring nodes
 	int xMove[] = {0, 1, 0, -1};
 
 	vector<vector<bool>> visitedVert(tempSize, vector<bool>(tempSize, false));
@@ -548,9 +548,9 @@ bool Maze::DFSsearch(){
 
 				mStack.pop();
 					if(x == finishX && y == finishY){
-						cout << "Aooke" << endl;
+						//cout << "Aooke" << endl;
 
-						cout << nodesVisitedDFS << "DFs " << endl;
+						cout << "Depth First Search visited: " << nodesVisitedDFS << " nodes." << endl;
 						return true;
 					}
 
@@ -580,35 +580,47 @@ bool Maze::BFSsearch(){
 	visitedVert[startX][startY] = true;
 	mQueue.push(make_pair(startX,startY));
 	nodesVisitedBFS = 0;
+	int out= 0;
 	while(!mQueue.empty()){
+		int queSize = mQueue.size();
 
-				int x = mQueue.front().first;
-				int y = mQueue.front().second;
+		for(int o = 0; o < queSize; o++){
+			int x = mQueue.front().first;
+
+			int y = mQueue.front().second;
+
+			//cout << x << y << endl;
+
 				if(solvedMazeBFS[x][y] != 2 && solvedMazeBFS[x][y] != 5){
 					solvedMazeBFS[x][y] = 6;
 				}
 
 				mQueue.pop();
-					if(x == finishX && y == finishY){
-						cout << "Aooke" << endl;
 
-						cout << nodesVisitedBFS <<  " BFS " << endl;
-						return true;
+				if(x == finishX && y == finishY){
+
+					cout << "Breath First Search visited: " << nodesVisitedBFS << " nodes." << endl;
+					cout << "Shortest path from purple to green is: " << out << endl;
+
+					return true;
 					}
 
-			for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
+				for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
 
-				int newX = x + xMove[i];
+					int newX = x + xMove[i];
 
-				int newY = y + yMove[i];
+					int newY = y + yMove[i];
 
-					if(newX >= 0 && newX < tempSize && newY >= 0 && newY < tempSize && solvedMazeBFS[newX][newY] != 1 && !visitedVert[newX][newY])
-					{
-						mQueue.push(make_pair(newX, newY));
-						nodesVisitedBFS++;
-						visitedVert[newX][newY] = true;
+						if(newX >= 0 && newX < tempSize && newY >= 0 && newY < tempSize && solvedMazeBFS[newX][newY] != 1 && !visitedVert[newX][newY])
+						{
+
+							mQueue.push(make_pair(newX, newY));
+							nodesVisitedBFS++;
+							visitedVert[newX][newY] = true;
+						}
+					}
 				}
-			}
+		out++;
 		}
 		return false;
 	}

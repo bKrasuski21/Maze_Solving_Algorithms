@@ -10,18 +10,29 @@
 #include <sstream>
 #include "Maze.h"
 #include "Node.h"
+#include <chrono>
 using namespace std;
 
 int main()
 {
-	cout << "please give me the size of your graph" << endl;
+	cout << "please give me the size of your graph: ";
 
 	int size;
 	cin >> size;
 	//cout << size;
 	Maze newMaze(size);
-	newMaze.BFSsearch();
+	auto dfsClockStart = chrono::steady_clock::now();
 	newMaze.DFSsearch();
+	auto dfsClockFinish = chrono::steady_clock::now();
+	chrono::duration<double> elapstedTimeDFS = dfsClockFinish - dfsClockStart;
+	cout << "Depth First Search elapsed time: " << elapstedTimeDFS.count() << "s" << endl;
+
+
+	auto bfsClockStart = chrono::steady_clock::now();
+	newMaze.BFSsearch();
+	auto bfsClockFinish = chrono::steady_clock::now();
+	chrono::duration<double> elapstedTimeBFS = bfsClockFinish - bfsClockStart;
+	cout << "Breath First Search elapsed time: " << elapstedTimeBFS.count() << "s" << endl;
 
 
 	newMaze.renderMaze();
