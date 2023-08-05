@@ -143,10 +143,13 @@ Maze::Maze(int size)
 		}
 
 	srand(time(NULL)); // set seed for random number
-	int startNum = rand() % (mazeSize-2) + 1; // get a random number between 1 - size -1 for location of start
-	int startSide = rand() % 4; // get a random number between 0- 3 to choose which side start will be on
+
 	int yStart[] = {1, 0, -1, 0}; // creates array for adjacent/neighboring nodes
 	int xStart[] = {0, 1, 0, -1};
+	bool start = false;
+	while(!start){
+		int startNum = rand() % (mazeSize-2) + 1; // get a random number between 1 - size -1 for location of start
+		int startSide = rand() % 4; // get a random number between 0- 3 to choose which side start will be on
 
 	if(startSide == 0) // condition if start side = 0
 		{
@@ -154,7 +157,6 @@ Maze::Maze(int size)
 
 			int y = startNum;
 
-			bool start = false;
 
 				for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
 
@@ -175,7 +177,6 @@ Maze::Maze(int size)
 
 			int y = startNum;
 
-			bool start = false;
 
 				for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
 
@@ -196,7 +197,6 @@ Maze::Maze(int size)
 
 			int y = mazeSize-1;
 
-			bool start = false;
 
 				for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
 
@@ -217,8 +217,6 @@ Maze::Maze(int size)
 
 			int y = 0;
 
-			bool start = false;
-
 				for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
 
 					int newX = x + xStart[i];
@@ -231,18 +229,19 @@ Maze::Maze(int size)
 				}
 			if(start) {column[startNum][0] = 2;}  // if there is a valid path neighbor change current node to start
 		}
+	}
 
 
-	int finishNum = rand() % (mazeSize-2) + 1; // get a random number between 1 - size -1 for location of start
-	int finishSide = rand() % 4; // get a random number between 0- 3 to choose which side start will be on
+	bool finish = false;
+	while(!finish){
+		int finishNum = rand() % (mazeSize-2) + 1; // get a random number between 1 - size -1 for location of start
+		int finishSide = rand() % 4; // get a random number between 0- 3 to choose which side start will be on
 
 	if(finishSide == 0)
 		{
 			int x = 0;
 
 			int y = finishNum;
-
-			bool finish = false;
 
 				for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
 
@@ -262,8 +261,6 @@ Maze::Maze(int size)
 
 			int y = finishNum;
 
-			bool finish = false;
-
 				for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
 
 					int newX = x + xStart[i];
@@ -281,8 +278,6 @@ Maze::Maze(int size)
 			int x = finishNum;
 
 			int y = mazeSize-1;
-
-			bool finish = false;
 
 				for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
 
@@ -302,8 +297,6 @@ Maze::Maze(int size)
 
 			int y = 0;
 
-			bool finish = false;
-
 				for(int i =0; i < 4; i++){ // finds all 4 neighbors if theyre valid
 
 					int newX = x + xStart[i];
@@ -316,7 +309,7 @@ Maze::Maze(int size)
 				}
 			if(finish) {column[finishNum][0] = 2;}  // if there is a valid path neighbor change current node to start
 		}
-
+	}
 
 	cout << "Everything ended properly??" << endl;
 	for(int i = 0; i < mazeSize; i++){
