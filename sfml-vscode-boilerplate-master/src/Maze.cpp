@@ -3,16 +3,19 @@
 #include <vector>
 #include <time.h>
 #include <stack>
+#include "Platform/Platform.hpp"
 
 using namespace std;
 
 Maze::Maze(int size)
 {
-	vector<vector<int>> column; // initilaize column vector
+
+	 					// initilaize column vector
 	int temp = size + 1;
 	int mazeSize = temp + size; // we need the vector to house a certain amount of NODES, but since we need to also have walls in our vector, this changes the size to account for walls based on the amount of nodes asked for
 	int prev = 1;
 	int prevRow = 1;
+	tempSize = mazeSize;
 	for(int i=0; i < mazeSize; i++){ // iterate through size of maze
 
 		vector<int> row; // initilize row vector
@@ -146,4 +149,68 @@ Maze::Maze(int size)
 		cout << endl;
 	}
 
+}
+void Maze::renderMaze(){
+
+	util::Platform platform;
+
+	sf::RenderWindow window;
+	// in Windows at least, this must be called before creating the window
+	float screenScalingFactor = platform.getScreenScalingFactor(window.getSystemHandle());
+	// Use the screenScalingFactor
+	window.create(sf::VideoMode(1200.0f * screenScalingFactor, 1200.0f * screenScalingFactor), "SFML works!");
+	platform.setIcon(window.getSystemHandle());
+
+	sf::Texture pathTexture;
+	sf::Texture noPathTexture;
+
+	noPathTexture.loadFromFile("content/no_path.png");
+	pathTexture.loadFromFile("content/path.png");
+
+
+	/*vector<vector<Node>> nodeVector;
+
+	for(int i =0; i < (int)column.size(); i++){
+		vector<Node> nodeRow;
+		nodeVector.push_back(nodeRow);
+		for(int k = 0; k < (int)column[0].size(); k++){
+			if(column[i][k] == 1){
+				bool path = false;
+				Node mNode( i,  k, path, noPathTexture);
+				nodeVector.at(i).push_back(mNode);
+			}else {
+				bool path = true;
+				Node mNode( i,  k, path, pathTexture);
+				nodeVector.at(i).push_back(mNode);
+			}
+		}
+	}
+*/
+	sf::Event event;
+
+	while (window.isOpen())
+	{
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+				window.close();
+		}
+
+		window.clear();
+
+		for(int i =0; i < tempSize; i++){
+			for(int k = 0; k < tempSize; k++){
+				//nodeVector[i][k].setPosition(20.f * i, 20.f * k);
+				sf::RectangleShape shape(sf::Vector2f(20.f , 20.f));
+				shape.setPosition(20.f * i, 20.f * k);
+				if(column[i][k] == 1){
+				shape.setTexture(&noPathTexture);
+				}else {
+				shape.setTexture(&pathTexture);
+				}
+				window.draw(shape);
+			}
+		}
+		window.display();
+	}
 }
