@@ -15,30 +15,27 @@ using namespace std;
 
 int main()
 {
-	cout << "please give me the size of your graph: ";
+	cout << "Please give me the size of your maze: ";
 
 	int size;
-	cin >> size;
-	//cout << size;
+	cin >> size; // gets size of maze from user
 	Maze newMaze(size);
-	auto dfsClockStart = chrono::steady_clock::now();
+
+	auto dfsClockStart = chrono::steady_clock::now(); // start timer
 	newMaze.DFSsearch();
-	auto dfsClockFinish = chrono::steady_clock::now();
-	chrono::duration<double> elapstedTimeDFS = dfsClockFinish - dfsClockStart;
-	cout << "Depth First Search elapsed time: " << elapstedTimeDFS.count() << "s" << endl;
+	auto dfsClockFinish = chrono::steady_clock::now(); // stops timer
+	chrono::duration<double> elapstedTimeDFS = dfsClockFinish - dfsClockStart; // calculates time of DFS
+	cout << "Depth First Search elapsed time: " << elapstedTimeDFS.count()  << "s" << endl; // prints out time for DFS
 
 
-	auto bfsClockStart = chrono::steady_clock::now();
+	auto bfsClockStart = chrono::steady_clock::now(); // starts timer for BFS
 	newMaze.BFSsearch();
-	auto bfsClockFinish = chrono::steady_clock::now();
-	chrono::duration<double> elapstedTimeBFS = bfsClockFinish - bfsClockStart;
-	cout << "Breath First Search elapsed time: " << elapstedTimeBFS.count() << "s" << endl;
+	auto bfsClockFinish = chrono::steady_clock::now(); // starts timer for BFS
+	chrono::duration<double> elapstedTimeBFS = bfsClockFinish - bfsClockStart; // calculates time for BFS
+	cout << "Breath First Search elapsed time: " << elapstedTimeBFS.count() << "s" << endl; // prints out time for BFS
 
 
-	newMaze.renderMaze();
-
-
-
+	newMaze.renderMaze(); // renders maze and UI
 
 	return 0;
 }

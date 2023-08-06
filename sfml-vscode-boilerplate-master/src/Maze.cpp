@@ -343,8 +343,8 @@ Maze::Maze(int size)
 	//cout << "Everything ended properly??" << endl; // for printing numerical equivalent of maze
 	for(int i = 0; i < mazeSize; i++){
 			vector<int> mazeRow;
-			solvedMazeBFS.push_back(mazeRow);
-			solvedMazeDFS.push_back(mazeRow);
+			solvedMazeBFS.push_back(mazeRow); // pushes back to BFS maze
+			solvedMazeDFS.push_back(mazeRow); // pushes back to DFS maze
 		for(int k=0; k < mazeSize; k++) {
 			//cout << column[i][k] << " ";
 			solvedMazeDFS.at(i).push_back(column[i][k]);
@@ -363,10 +363,10 @@ void Maze::renderMaze(){
 	// in Windows at least, this must be called before creating the window
 	float screenScalingFactor = platform.getScreenScalingFactor(window.getSystemHandle());
 	// Use the screenScalingFactor
-	window.create(sf::VideoMode(1600.0f * screenScalingFactor, 1200.0f * screenScalingFactor), "Maze Ronner (pls no copyright)");
+	window.create(sf::VideoMode(1600.0f * screenScalingFactor, 1200.0f * screenScalingFactor), "Maze Ronner (pls no copyright)"); // creates windows with 1600 x 1200
 	platform.setIcon(window.getSystemHandle());
 
-	sf::Texture pathTexture;
+	sf::Texture pathTexture; // declares all needed textures for SFML
 	sf::Texture algoText;
 	sf::Texture noPathTexture;
 	sf::Texture finish;
@@ -376,10 +376,10 @@ void Maze::renderMaze(){
 	sf::Texture resetText;
 	sf::Texture solvedDfs;
 	bool BFSButton = false;
-	bool DFSButton = false;
+	bool DFSButton = false; // initilizes bools for all 3 buttons
 	bool resetButton = true;
 
-	noPathTexture.loadFromFile("content/yellow.png");
+	noPathTexture.loadFromFile("content/yellow.png"); // loads all textures
 	pathTexture.loadFromFile("content/path.png");
 	algoText.loadFromFile("content/magenta.png");
 	finish.loadFromFile("content/niceGreen.png");
@@ -390,26 +390,8 @@ void Maze::renderMaze(){
 	resetText.loadFromFile("content/reset.png");
 
 
-	/*vector<vector<Node>> nodeVector;
 
-	for(int i =0; i < (int)column.size(); i++){
-		vector<Node> nodeRow;
-		nodeVector.push_back(nodeRow);
-		for(int k = 0; k < (int)column[0].size(); k++){
-			if(column[i][k] == 1){
-				bool path = false;
-				Node mNode( i,  k, path, noPathTexture);
-				nodeVector.at(i).push_back(mNode);
-			}else {
-				bool path = true;
-				Node mNode( i,  k, path, pathTexture);
-				nodeVector.at(i).push_back(mNode);
-			}
-		}
-	}
-	*/
-
-	float sizeOfNode = 1200.0/(float)tempSize;
+	float sizeOfNode = 1200.0/(float)tempSize; // finds size of each node
 	sf::Event event;
 
 	while (window.isOpen())
@@ -421,43 +403,44 @@ void Maze::renderMaze(){
 		}
 
 		window.clear();
-		sf::RectangleShape bfs(sf::Vector2f(200.f, 200.f));
+		sf::RectangleShape bfs(sf::Vector2f(200.f, 200.f)); // creates shape for all 3 buttons
 		sf::RectangleShape dfs(sf::Vector2f(200.f, 200.f));
 		sf::RectangleShape reset(sf::Vector2f(200.f, 200.f));
 		bfs.setPosition(1300, 100);
-		dfs.setPosition(1300, 400);
+		dfs.setPosition(1300, 400); // sets position for buttons
 		reset.setPosition(1300, 700);
 		bfs.setTexture(&BFSText);
-		dfs.setTexture(&DFSText);
+		dfs.setTexture(&DFSText); // sets textures for buttons
 		reset.setTexture(&resetText);
 
 		if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
 			//sf::Vector2i localPos = sf::Mouse::getPosition(window);
 			int x = sf::Mouse::getPosition(window).x;
-			int y = sf::Mouse::getPosition(window).y;
+			int y = sf::Mouse::getPosition(window).y; // gets position of mouse
 			if(x >1299 && x < 1501){
 				if(y >= 100 && y <= 300){
-					bfs.setSize(sf::Vector2f(150.f, 150.f));
+					bfs.setSize(sf::Vector2f(150.f, 150.f)); // if BFS button clicked set true
 					BFSButton = true;
 					DFSButton = false;
 					resetButton = false;
 				}
 				else if(y >=400 && y <= 600){
-					dfs.setSize(sf::Vector2f(150.f, 150.f));
+					dfs.setSize(sf::Vector2f(150.f, 150.f)); // if DFS button clicked set true
 					DFSButton = true;
 					BFSButton = false;
 					resetButton = false;
 				}else if(y >= 700 && y <= 900){
-					reset.setSize(sf::Vector2f(150.f, 150.f));
+					reset.setSize(sf::Vector2f(150.f, 150.f)); // if reset button clicked set true
 					DFSButton = false;
 					BFSButton = false;
 					resetButton = true;
 				}
 			}
 		}
-		if(resetButton){
-			for(int i =0; i < tempSize; i++){
+		if(resetButton){ // if reset button, itrate and draw unsolved maze
+			for(int i = 0; i < tempSize; i++){
+
 				for(int k = 0; k < tempSize; k++){
 					//nodeVector[i][k].setPosition(20.f * i, 20.f * k);
 					sf::RectangleShape shape(sf::Vector2f(sizeOfNode , sizeOfNode));
@@ -477,7 +460,7 @@ void Maze::renderMaze(){
 				}
 			}
 		}
-		if(BFSButton){
+		if(BFSButton){ // if BFS button pressed ,iterate and draw BFS maze
 			for(int i =0; i < tempSize; i++){
 				for(int k = 0; k < tempSize; k++){
 					//nodeVector[i][k].setPosition(20.f * i, 20.f * k);
@@ -498,7 +481,7 @@ void Maze::renderMaze(){
 				}
 			}
 		}
-		if(DFSButton){
+		if(DFSButton){ // if DFS button pressed iterate and draw BFS maze
 			for(int i =0; i < tempSize; i++){
 				for(int k = 0; k < tempSize; k++){
 					//nodeVector[i][k].setPosition(20.f * i, 20.f * k);
@@ -521,7 +504,7 @@ void Maze::renderMaze(){
 		}
 
 
-		window.draw(bfs);
+		window.draw(bfs); // draw buttons
 		window.draw(dfs);
 		window.draw(reset);
 		window.display();
@@ -532,22 +515,22 @@ bool Maze::DFSsearch(){
 	int yMove[] = {-1, 0, 1, 0}; // creates array for adjacent/neighboring nodes
 	int xMove[] = {0, 1, 0, -1};
 
-	vector<vector<bool>> visitedVert(tempSize, vector<bool>(tempSize, false));
-	stack<pair<int, int>> mStack;
+	vector<vector<bool>> visitedVert(tempSize, vector<bool>(tempSize, false)); // creates visited vector and sets all to false
+	stack<pair<int, int>> mStack; // creates stack for DFS
 
-	visitedVert[startX][startY] = true;
-	mStack.push(make_pair(startX,startY));
+	visitedVert[startX][startY] = true; // sets start as visited
+	mStack.push(make_pair(startX,startY)); // pushes start to stack
 	nodesVisitedDFS = 0;
 	while(!mStack.empty()){
 
 				int x = mStack.top().first;
 				int y = mStack.top().second;
-				if(solvedMazeDFS[x][y] != 2 && solvedMazeDFS[x][y] != 5){
+				if(solvedMazeDFS[x][y] != 2 && solvedMazeDFS[x][y] != 5){ // makes sure start node doesnt change color
 					solvedMazeDFS[x][y] = 6;
 				}
 
 				mStack.pop();
-					if(x == finishX && y == finishY){
+					if(x == finishX && y == finishY){ // if finish found print data
 						//cout << "Aooke" << endl;
 
 						cout << "Depth First Search visited: " << nodesVisitedDFS << " nodes." << endl;
@@ -562,7 +545,7 @@ bool Maze::DFSsearch(){
 
 					if(newX >= 0 && newX < tempSize && newY >= 0 && newY < tempSize && solvedMazeDFS[newX][newY] != 1 && !visitedVert[newX][newY])
 					{
-						mStack.push(make_pair(newX, newY));
+						mStack.push(make_pair(newX, newY)); // if valid neighbor pushes to stack, increments visitedNodes, and sets visited to true
 						nodesVisitedDFS++;
 						visitedVert[newX][newY] = true;
 				}
@@ -574,11 +557,11 @@ bool Maze::BFSsearch(){
 	int xMove[] = {-1, 0, 1, 0}; // creates array for adjacent/neighboring nodes
 	int yMove[] = {0, -1, 0, 1};
 
-	vector<vector<bool>> visitedVert(tempSize, vector<bool>(tempSize, false));
-	queue<pair<int, int>> mQueue;
+	vector<vector<bool>> visitedVert(tempSize, vector<bool>(tempSize, false)); // creates visited vector and sets all to false
+	queue<pair<int, int>> mQueue; // initilizies queue for BFS
 
 	visitedVert[startX][startY] = true;
-	mQueue.push(make_pair(startX,startY));
+	mQueue.push(make_pair(startX,startY)); // pushes start node to visited and queue
 	nodesVisitedBFS = 0;
 	int out= 0;
 	while(!mQueue.empty()){
@@ -591,13 +574,13 @@ bool Maze::BFSsearch(){
 
 			//cout << x << y << endl;
 
-				if(solvedMazeBFS[x][y] != 2 && solvedMazeBFS[x][y] != 5){
+				if(solvedMazeBFS[x][y] != 2 && solvedMazeBFS[x][y] != 5){ // makes sure to leave start and finish the color they are
 					solvedMazeBFS[x][y] = 6;
 				}
 
 				mQueue.pop();
 
-				if(x == finishX && y == finishY){
+				if(x == finishX && y == finishY){ // if finish found prints data
 
 					cout << "Breath First Search visited: " << nodesVisitedBFS << " nodes." << endl;
 					cout << "Shortest path from purple to green is: " << out << endl;
@@ -614,13 +597,13 @@ bool Maze::BFSsearch(){
 						if(newX >= 0 && newX < tempSize && newY >= 0 && newY < tempSize && solvedMazeBFS[newX][newY] != 1 && !visitedVert[newX][newY])
 						{
 
-							mQueue.push(make_pair(newX, newY));
+							mQueue.push(make_pair(newX, newY));  // if valid neighbor pushes to queue, increments visitedNodes, and sets visited to true
 							nodesVisitedBFS++;
 							visitedVert[newX][newY] = true;
 						}
 					}
 				}
-		out++;
+		out++; // increments shortest path to finish
 		}
 		return false;
 	}
